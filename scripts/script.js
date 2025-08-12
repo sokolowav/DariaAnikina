@@ -89,12 +89,10 @@ document.addEventListener('DOMContentLoaded', function () {
   const card = document.querySelector('.business-card')
   const contactItems = document.querySelectorAll('.contact-item')
   const socialLinks = document.querySelectorAll('.social-link')
-
-  // Проверяем, мобильное ли устройство
   const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window
 
   if (!isMobile) {
-    // Эффект наклона карточки при движении мыши (только для десктопа)
+    // Эффект наклона карточки при движении мыши (десктоп)
     card.addEventListener('mousemove', function (e) {
       const rect = card.getBoundingClientRect()
       const x = e.clientX - rect.left
@@ -116,15 +114,13 @@ document.addEventListener('DOMContentLoaded', function () {
   } else {
     // Мобильные анимации
 
-    // 1. Гироскоп анимация (наклон устройства)
+    // Гироскоп анимация при наклоне устройства
     if (window.DeviceOrientationEvent) {
       window.addEventListener('deviceorientation', function (e) {
-        const tiltX = e.beta / 3 // Ограничиваем угол наклона
+        const tiltX = e.beta / 3
         const tiltY = e.gamma / 3
-
-        // Применяем плавную трансформацию
-        card.style.transform = `perspective(1000px) rotateX(${-tiltX}deg) rotateY(${tiltY}deg) translateY(-5px)`
-        card.style.transition = 'transform 0.1s ease-out'
+        card.style.transform = `perspective(1000px) rotateX(${-tiltX}deg) rotateY(${tiltY}deg) translateY(-10px)`
+        card.style.transition = 'transform 0.3s ease-out'
       })
     }
 
@@ -176,13 +172,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // 4. Анимация элементов при скролле/появлении
     const observerOptions = {
       threshold: 0.3,
-      rootMargin: '0px 0px -50px 0px',
+      rootMargin: '0px 0px -10px 0px',
     }
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry, index) => {
         if (entry.isIntersecting) {
-          // Поэтапное появление элементов
           setTimeout(() => {
             entry.target.style.opacity = '1'
             entry.target.style.transform = 'translateY(0) scale(1)'
@@ -191,7 +186,6 @@ document.addEventListener('DOMContentLoaded', function () {
       })
     }, observerOptions)
 
-    // Применяем наблюдатель к элементам
     const animatedElements = [
       '.profile-photo',
       '.name',
@@ -208,34 +202,6 @@ document.addEventListener('DOMContentLoaded', function () {
         element.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
         observer.observe(element)
       }
-    })
-
-    // 5. Shake анимация при двойном тапе
-    let lastTouchTime = 0
-    card.addEventListener('touchend', function (e) {
-      const currentTime = new Date().getTime()
-      const tapLength = currentTime - lastTouchTime
-
-      if (tapLength < 500 && tapLength > 0) {
-        // Двойной тап - shake анимация
-        card.style.animation = 'shake 0.6s ease-in-out'
-
-        // Добавляем эффект конфетти или звездочек
-        createStars(card)
-
-        setTimeout(() => {
-          card.style.animation = ''
-        }, 600)
-      }
-      lastTouchTime = currentTime
-    })
-
-    // 6. Параллакс эффект при скролле
-    window.addEventListener('scroll', () => {
-      const scrolled = window.pageYOffset
-      const parallax = scrolled * 0.5
-
-      card.style.transform = `translateY(${parallax}px)`
     })
   }
 
@@ -268,31 +234,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 600)
   }
 
-  // Функция создания звездочек
-  function createStars(element) {
-    for (let i = 0; i < 6; i++) {
-      const star = document.createElement('div')
-      star.innerHTML = '✨'
-      star.style.cssText = `
-        position: absolute;
-        font-size: 20px;
-        pointer-events: none;
-        z-index: 1000;
-        animation: starBurst 1s ease-out forwards;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        animation-delay: ${i * 0.1}s;
-      `
-
-      element.appendChild(star)
-
-      setTimeout(() => {
-        star.remove()
-      }, 1000)
-    }
-  }
-
   // Копирование контактов в буфер обмена
   contactItems.forEach((item) => {
     if (item.tagName !== 'A') {
@@ -301,15 +242,15 @@ document.addEventListener('DOMContentLoaded', function () {
         navigator.clipboard
           .writeText(text)
           .then(() => {
-            // Показываем уведомление с анимацией
+            // Уведомление с анимацией
             const notification = document.createElement('div')
-            notification.textContent = 'Скопировано!'
+            notification.textContent = 'Скопировано'
             notification.style.cssText = `
               position: fixed;
               top: 20px;
               right: 20px;
-              background: rgba(234, 197, 126, 0.95);
-              color: #1f355c;
+              background: #1f355c;
+              color:rgba(234, 197, 126, 0.95);
               padding: 12px 20px;
               border-radius: 25px;
               z-index: 1000;
