@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const touch = e.touches[0]
       const deltaX = (touch.clientX - startX) / 50
-      const deltaY = (touch.clientY - startY) / 50
+      const deltaY = (touch.clientY - startY) / 25
 
       card.style.transform = `perspective(1000px) rotateY(${deltaX}deg) rotateX(${-deltaY}deg) scale(0.98)`
     })
