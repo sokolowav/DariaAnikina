@@ -115,16 +115,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // Мобильные анимации
 
     // Гироскоп анимация при наклоне устройства
-    if (window.DeviceOrientationEvent) {
-      window.addEventListener('deviceorientation', function (e) {
-        const tiltX = e.beta / 3
-        const tiltY = e.gamma / 3
-        card.style.transform = `perspective(1000px) rotateX(${-tiltX}deg) rotateY(${tiltY}deg) translateY(-10px)`
-        card.style.transition = 'transform 0.3s ease-out'
-      })
-    }
+    // if (window.DeviceOrientationEvent) {
+    //   window.addEventListener('deviceorientation', function (e) {
+    //     const tiltX = e.beta / 3
+    //     const tiltY = e.gamma / 3
+    //     card.style.transform = `perspective(1000px) rotateX(${-tiltX}deg) rotateY(${tiltY}deg) translateY(-10px)`
+    //     card.style.transition = 'transform 0.3s ease-out'
+    //   })
+    // }
 
-    // 2. Touch анимации
+    // Touch анимации
     let isPressed = false
     let startX, startY
 
@@ -134,11 +134,9 @@ document.addEventListener('DOMContentLoaded', function () {
       startX = touch.clientX
       startY = touch.clientY
 
-      // Эффект нажатия
       card.style.transform = 'scale(0.95) translateY(5px)'
       card.style.transition = 'transform 0.15s ease'
 
-      // Добавляем ripple эффект
       createRipple(e, card)
     })
 
@@ -159,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function () {
       card.style.transition = 'transform 0.3s ease'
     })
 
-    // 3. Автоматическая "дышащая" анимация
+    // "Дышащая" анимация
     setInterval(() => {
       if (!isPressed) {
         card.style.animation = 'breathe 4s ease-in-out'
@@ -169,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }, 8000)
 
-    // 4. Анимация элементов при скролле/появлении
+    // Анимация элементов при скролле/появлении
     const observerOptions = {
       threshold: 0.3,
       rootMargin: '0px 0px -10px 0px',
@@ -273,80 +271,4 @@ document.addEventListener('DOMContentLoaded', function () {
       })
     }
   })
-
-  // Добавляем CSS для всех анимаций
-  const style = document.createElement('style')
-  style.textContent = `
-    @keyframes slideInBounce {
-      from {
-        transform: translateX(100%) scale(0.8);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0) scale(1);
-        opacity: 1;
-      }
-    }
-
-    @keyframes slideOutBounce {
-      from {
-        transform: translateX(0) scale(1);
-        opacity: 1;
-      }
-      to {
-        transform: translateX(100%) scale(0.8);
-        opacity: 0;
-      }
-    }
-    
-    @keyframes rippleEffect {
-      from {
-        transform: scale(0);
-        opacity: 0.6;
-      }
-      to {
-        transform: scale(1);
-        opacity: 0;
-      }
-    }
-    
-    @keyframes breathe {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.02); }
-    }
-    
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      10%, 30%, 50%, 70%, 90% { transform: translateX(-3px) rotate(-1deg); }
-      20%, 40%, 60%, 80% { transform: translateX(3px) rotate(1deg); }
-    }
-    
-    @keyframes starBurst {
-      0% {
-        transform: translate(-50%, -50%) scale(0) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translate(-50%, -50%) translate(${
-          Math.random() * 100 - 50
-        }px, ${Math.random() * 100 - 50}px) scale(1) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .business-card {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      
-      .contact-item, .social-link {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      
-      .contact-item:active, .social-link:active {
-        transform: scale(0.95) translateY(2px);
-      }
-    }
-  `
-  document.head.appendChild(style)
 })
